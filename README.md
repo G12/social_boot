@@ -1,4 +1,4 @@
-# Socially Twiegand
+# Socially Twiegand - Bootstrap Stream
 
 This is my working version of the Angular-Meteor tutorial app.
 
