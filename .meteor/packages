@@ -24,3 +24,6 @@ sanjo:jasmine
 velocity:html-reporter
 velocity:console-reporter
 tmeasday:publish-counts
+check
+email
+less

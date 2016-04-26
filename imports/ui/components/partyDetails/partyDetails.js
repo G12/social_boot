@@ -5,6 +5,8 @@ import { Meteor } from 'meteor/meteor';
 
 import './partyDetails.html';
 import {Parties} from '../../../api/parties';
+import { name as PartyUninvited } from '../partyUninvited/partyUninvited';
+import { name as PartyMap } from '../partyMap/partyMap';
 
 class PartyDetails {
   constructor($stateParams, $scope, $reactive) {
@@ -25,8 +27,34 @@ class PartyDetails {
       },
       users() {
         return Meteor.users.find({});
+      },
+      isLoggedIn() {
+        //let test = !!Meteor.userId();
+        //console.log("!!Meteor.userId() = " + test);
+        return !!Meteor.userId();
+      },
+      currentUserId() {
+        return Meteor.userId();
       }
     });
+  }
+
+  //TODO My own functionality check
+  isOwner() {
+    if (!this.party) {
+      return false;
+    }
+    //let test = this.isLoggedIn && this.party.owner === Meteor.userId();
+    //console.log("is Owner = " + test);
+    return this.isLoggedIn && this.party.owner === Meteor.userId();
+  }
+
+  canInvite() {
+    if (!this.party) {
+      return false;
+    }
+
+    return !this.party.public && this.party.owner === Meteor.userId();
   }
 
   save() {
@@ -36,7 +64,8 @@ class PartyDetails {
       $set: {
         name: this.party.name,
         description: this.party.description,
-        public: this.party.public
+        public: this.party.public,
+        location: this.party.location
       }
     }, (error) => {
       if (error) {
@@ -53,7 +82,9 @@ const name = 'partyDetails';
 // create a module
 export default angular.module(name, [
   angularMeteor,
-  uiRouter
+  uiRouter,
+  PartyUninvited,
+  PartyMap
 ]).component(name, {
     templateUrl: `imports/ui/components/${name}/${name}.html`,
     controllerAs: name,

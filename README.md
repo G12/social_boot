@@ -1,6 +1,13 @@
+# Socially Twiegand
+
+This is my working version of the Angular-Meteor tutorial app.
+
+See: [Socially - A Meteor-Angular Tutorial App] (http://www.angular-meteor.com/tutorials/socially)
+
 # Deploy
 
 DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy socially.twiegand.com --settings './settings.json'
+See: [Deploy to Galaxy] (http://guide.meteor.com/deployment.html#galaxy)
 
 # Socially Tutorial App
 
@@ -147,3 +154,51 @@ meteor add tmeasday:publish-counts
 
 This package helps to publish the count of a cursor in real-time, without any dependency on the subscribe method.
 
+## To make our lives easier, we can just use underscore package.
+
+$ meteor npm install --save underscore
+13.3  Use underscore imports/ui/filters/uninvitedFilter.js »
+
+
+## Check and Email
+First, we check validation with the the check function.
+To use check we need to add the check package:
+
+meteor add check
+
+The rest of the code is pretty much self explanatory, but important thing to notice is the Email function that sends email to the invited client. This function can't be called from the client side so we have to put it inside an isServer statement.
+Don't forget to add the email package to your project in the command line:
+
+meteor add email
+
+And import Email object from its module:
+
+## Google Maps
+Let's add location to our parties.
+The most popular maps widget is Google Maps so let's use that.
+
+First, let's add the angular-google-maps Meteor package:
+meteor npm install --save angular-google-maps
+
+We also have to install another package:
+meteor npm install --save angular-simple-logger
+
+Then let's create a PartyMap component:
+
+## Adding and importing Bootstrap 4
+First, we need to add Boostrap 4 to our project - so let's do that.
+Run the following command in your Terminal:
+
+meteor npm install bootstrap@4.0.0-alpha.2 --save
+
+Import bootstrap client/main.js »
+
+import angular from 'angular';
+import 'bootstrap/dist/css/bootstrap.css';
+
+
+## Add LESS
+OK, simple styling works, but we want to be able to use LESS.
+We can't add LESS from NPM because it is a compiler and we want it to be a part of Meteor build - so we will add it from Atmosphere:
+
+$ meteor add less

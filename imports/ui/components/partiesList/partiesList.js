@@ -7,8 +7,13 @@ import './partiesList.html';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 import {Parties} from '../../../api/parties';
 import { name as PartiesSort } from '../partiesSort/partiesSort';
+import { name as PartiesMap } from '../partiesMap/partiesMap';
 import {name as PartyAdd} from '../partyAdd/partyAdd';
 import {name as PartyRemove} from '../partyRemove/partyRemove';
+import { name as PartyCreator } from '../partyCreator/partyCreator';
+import { name as PartyRsvp } from '../partyRsvp/partyRsvp';
+import { name as PartyRsvpsList } from '../partyRsvpsList/partyRsvpsList';
+//import { name as PartyUnanswered } from '../partyUnanswered/partyUnanswered';
 
 class PartiesList {
   constructor($scope, $reactive) {
@@ -26,11 +31,16 @@ class PartiesList {
       name: 1
     };
 
+    this.searchText = '';
+
     this.subscribe('parties', () => [{
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')}
+      sort: this.getReactively('sort')
+      }, this.getReactively('searchText')
     ]);
+
+    this.subscribe('users');
 
     this.helpers({
       parties() {
@@ -40,8 +50,18 @@ class PartiesList {
       },
       partiesCount() {
         return Counts.get('numberOfParties');
+      },
+      isLoggedIn() {
+        return !!Meteor.userId();
+      },
+      currentUserId() {
+        return Meteor.userId();
       }
     });
+  }
+
+  isOwner(party) {
+    return this.isLoggedIn && party.owner === this.currentUserId;
   }
 
   pageChanged(newPage) {
@@ -60,9 +80,14 @@ export default angular.module(name, [
   angularMeteor,
   uiRouter,
   PartiesSort,
+  PartiesMap,
   PartyAdd,
   utilsPagination,
-  PartyRemove
+  PartyRemove,
+  PartyCreator,
+  PartyRsvp,
+  PartyRsvpsList
+
 ]).component(name, {
     templateUrl: `imports/ui/components/${name}/${name}.html`,
     controllerAs: name,
